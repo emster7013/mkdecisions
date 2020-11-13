@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 const ContactPage = (props) => {
   const [data, setData] = useState({
     firstName: '',
-    LastName:'',
     email: '',
     message: ''
   });
@@ -37,17 +36,6 @@ const ContactPage = (props) => {
          
         </div>
  
-        <div>
-          <label htmlFor='lastName'>Last Name</label>
-          <input
-            name='lastName'
-            type='text'
-            value={data.lastName}
-            placeholder='Last Name'
-            onChange={handleChange}
-          />
-        
-        </div>
  
         <div>
           <label htmlFor='email'>
@@ -65,7 +53,7 @@ const ContactPage = (props) => {
         <div>
           <label htmlFor='message'>Message</label>
           <input
-            name='lastName'
+            name='message'
             type='text'
             value={data.message}
             placeholder='Message'
