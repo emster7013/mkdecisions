@@ -1,0 +1,42 @@
+{
+    "paths": [
+        {
+            "name": "/sendemail",
+            "lambdaFunction": "emailfunction",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/sendemail"
+        }
+    ],
+    "resourceName": "mkapi",
+    "apiName": "mkapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "emailfunction"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-myapp-dev-140210-authRole",
+        "unAuthRoleName": "amplify-myapp-dev-140210-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "emailfunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
