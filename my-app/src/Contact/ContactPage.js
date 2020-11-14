@@ -20,18 +20,17 @@ const ContactPage = (props) => {
     
  const handleSubmit = e => {
      e.preventDefault();
-     const data = {
-         body : {
+
+     API.post('mkapi', '/sendemail',{
+         body: {
         name:formValues.name,
         email:formValues.email,
         message:formValues.message
-    }
-}
-     API.post('mkapi', '/sendemail', data)
-     .then((res)=>{
-         console.log(data)
-     })
-     setFormValues(initialValues)
+               }})
+               .then((res)=>{
+         console.log(res)
+        })
+        setFormValues(initialValues)
  }
  const handleClear = e => {
     e.preventDefault();
