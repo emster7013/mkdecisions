@@ -1,7 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Amplify, {API} from 'aws-amplify';
-import { useForm } from 'react-hook-form';
-import Button from '@material-ui/core/Button';
+import {Button, Grid, TextField, Typography, Dialog} from '@material-ui/core';
+import 'fontsource-roboto';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
  
 {/*Here I'm going to redo the whole init vaules and errors so that we can get the form validation working the right way*/}
 const initialValues = {
@@ -17,25 +21,29 @@ const errors = {
 };
 const ContactPage = (props) => {
     const [formValues, setFormValues] = useState(initialValues);
-    
- const handleSubmit = e => {
-     e.preventDefault();
+    const [open, setOpen] = React.useState(false);
 
-     API.post('mkapi', '/sendemail',{
-         body: {
-        name:formValues.name,
-        email:formValues.email,
-        message:formValues.message
-               }})
-               .then((res)=>{
-         console.log(res)
-        })
-        setFormValues(initialValues)
- }
- const handleClear = e => {
+  const handleClickOpen = (e) => {
     e.preventDefault();
-    setFormValues(initialValues);
-};
+
+    API.post('mkapi', '/sendemail',{
+        body: {
+       name:formValues.name,
+       email:formValues.email,
+       message:formValues.message
+              }})
+              .then((res)=>{
+        console.log(res)
+       })
+       setFormValues(initialValues)
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+ 
   const handleChange = (e) => {
     setFormValues({
       ...formValues,
@@ -48,12 +56,13 @@ const ContactPage = (props) => {
 //     name = name.target 
 
   return (
-    <div className='contact'>
-        <h2>Contact Us!</h2>
-        <p>Let us know what you think! In order to provide you with better service please don't heistate to give use your feedback. Thank you.</p>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
+    <Grid>
+        <h3>Contact Us!</h3>
+        <Typography>Let us know what you think! In order to provide you with better service please don't heistate to give use your feedback. Thank you.</Typography>
+      <form onSubmit={handleClose}>
+        <Grid container direction="column" justify="space-evenly" alignItems="center">
+          <TextField
+          id='standard'
             name='name'
             type='text'
             value={formValues.name}
@@ -61,32 +70,57 @@ const ContactPage = (props) => {
             onChange={handleChange}
           />
          
-        </div>
- 
- 
-        <div>
-          <input
+        </Grid>
+
+        <Grid item>
+          <TextField
+          id='standard'
             name='email'
             type='email'
             value={formValues.email}
-            placeholder='email'
+            placeholder='Email'
             onChange={handleChange}
           />
-          {/*This is where I'll want to somehow to the email portion of the submit thingy*/}
-        </div>
-        <div>
-          <input
+        </Grid>
+        <Grid item>
+          <TextField
+          id='standard'
             name='message'
             type='text'
             value={formValues.message}
             placeholder='Message'
             onChange={handleChange}
           />
-        </div>
+        </Grid>
         {/* <Button type='submit'  variant='contained' color='primary'> </Button> */}
-        <button type ='submit' onClick={handleSubmit}> Submit</button>
+        
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+        Send Message
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Do you want to send the message?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This is letting you know that you will be sending a message, if you'd like to decline please click no thanks.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Send Message
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            No Thanks
+          </Button>
+        </DialogActions>
+      </Dialog>
       </form>
-    </div>
+    
+    </Grid>
   );
 };
 export default ContactPage
