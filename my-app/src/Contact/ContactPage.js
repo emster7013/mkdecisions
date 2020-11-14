@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Amplify, {API} from 'aws-amplify';
 import {Button, Grid, TextField, Typography, Dialog} from '@material-ui/core';
 import 'fontsource-roboto';
+import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -11,14 +12,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 const initialValues = {
 	name: '',
 	email: '',
-	message: ''
+    message: ''
 };
 
-const errors = {
-	nameError: '',
-	emailError: '',
-	messageError: ''
-};
 const ContactPage = (props) => {
     const [formValues, setFormValues] = useState(initialValues);
     const [open, setOpen] = React.useState(false);
@@ -49,17 +45,18 @@ const ContactPage = (props) => {
       ...formValues,
       [e.target.name]: e.target.value,
     });
+   
   };
-//   (if name === '' ''){
-//     //Throw some kind of error
-//     }else{
-//     name = name.target 
+
+//   if (formValues.name === ''){
+//     alert( "Please provide your name!" );
+//     } return formValues.name = true
 
   return (
     <Grid>
         <h3>Contact Us!</h3>
         <Typography>Let us know what you think! In order to provide you with better service please don't heistate to give use your feedback. Thank you.</Typography>
-      <form onSubmit={handleClose}>
+      <ValidatorForm onSubmit={handleClose} >
         <Grid container direction="column" justify="space-evenly" alignItems="center">
           <TextField
           id='standard'
@@ -69,17 +66,20 @@ const ContactPage = (props) => {
             placeholder='Name'
             onChange={handleChange}
           />
+         <div style={{fontsize:10, color:'red'}}>{props.nameError}</div>
          
         </Grid>
 
         <Grid item>
-          <TextField
+          <TextValidator
           id='standard'
             name='email'
             type='email'
             value={formValues.email}
             placeholder='Email'
             onChange={handleChange}
+            validators={['required', 'isEmail']}
+            errorMessages={['this field is required', 'email is not valid']} 
           />
         </Grid>
         <Grid item>
@@ -118,7 +118,7 @@ const ContactPage = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-      </form>
+      </ValidatorForm>
     
     </Grid>
   );
